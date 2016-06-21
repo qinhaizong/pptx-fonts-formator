@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} 
+				- %msg%n"/> -->
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</Console>
+		<File name="MyFile" fileName="logs/server.log">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+		</File>
+		<Async name="Async">
+			<AppenderRef ref="Console" />
+		</Async>
+	</appenders>
+	<loggers>
+		<!-- <logger name="org.car.dvr.client" level="warn" additivity="true">
+			<appender-ref ref="MyFile"/>
+		</logger> -->
+		<root level="INFO">
+			<appender-ref ref="Console" />
+			<!--<appender-ref ref="MyFile" />-->
+		</root>
+	</loggers>
+</configuration>

@@ -163,7 +163,7 @@ public class AppTest {
                 Element n = (Element) spPrCompile.evaluate(node, XPathConstants.NODE);
                 logger.info("{}", n);
                 if (n != null && n.hasChildNodes()) {
-                    logger.info("偏移" + n.getNodeName());
+                    logger.info("编辑子节点情况");
                     //<p:spPr> <a:xfrm> <a:off x="539750" y="44450"/> <a:ext cx="8064500" cy="936625"/> </a:xfrm> <a:noFill/> </p:spPr>
                     Node off = (Node) offCompile.evaluate(n, XPathConstants.NODE);
                     if (null != off) {
@@ -177,7 +177,21 @@ public class AppTest {
                         extAttributes.getNamedItem("cx").setNodeValue("8064500");
                         extAttributes.getNamedItem("cy").setNodeValue("936625");
                     }
-                } else {
+
+                } else if (!n.hasChildNodes()) { // <p:spPr/>
+                    logger.info("添加子节点");
+                    Element xfrm = document.createElement("a:xfrm");
+                    Element aOff = document.createElement("a:off");
+                    aOff.setAttribute("x", "539750");
+                    aOff.setAttribute("y", "44450");
+                    Element aExt = document.createElement("a:ext");
+                    aExt.setAttribute("cx", "8064500");
+                    aExt.setAttribute("cy", "936625");
+                    xfrm.appendChild(aOff);
+                    xfrm.appendChild(aExt);
+                    n.appendChild(xfrm);
+                } else { //
+                    logger.info("创建全新的了节点");
                     Element spPr = document.createElement("p:spPr");
                     Element xfrm = document.createElement("a:xfrm");
                     Element aOff = document.createElement("a:off");
@@ -189,11 +203,8 @@ public class AppTest {
                     xfrm.appendChild(aOff);
                     xfrm.appendChild(aExt);
                     spPr.appendChild(xfrm);
-                    logger.info("add new dom.{}", spPr);
-                    n.appendChild(spPr);
-                    logger.info(spPr);
-                    //Node txBody = (Node) txBodyCompile.evaluate(node, XPathConstants.NODE);
-                    //document.insertBefore(spPr, txBody);
+                    Node txBody = (Node) txBodyCompile.evaluate(node, XPathConstants.NODE);
+                    document.insertBefore(spPr, txBody);
                 }
                 // 修改标头斜体, 大小
                 NodeList rprs = (NodeList) rprCompile.evaluate(node, XPathConstants.NODESET);

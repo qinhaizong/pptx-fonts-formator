@@ -1,5 +1,7 @@
 package org.chongjing.pptx;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +15,8 @@ import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+
+import static org.apache.commons.io.FileUtils.*;
 
 /**
  * Unit test for simple App.
@@ -66,5 +70,10 @@ public class AppTest {
         app.modify(file);
     }
 
+    @Test
+    public void deleteDir() throws IOException {
+        String dir = "/Users/student/Documents/课件/jsp方立勋_20160623150951";
+        deleteDirectory(new File(dir));
+    }
 
 }

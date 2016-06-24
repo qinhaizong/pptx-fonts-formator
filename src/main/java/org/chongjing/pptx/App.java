@@ -31,6 +31,12 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * 格式化pptx文件
+ * 操作:
+ * 0. ppt --> pptx (手动处理)
+ * 1. 将pptx解压
+ * 2. 修改ppt/sides/side[n].xml
+ * 3. 将解压出的pptx目录重新变压缩为 .pptx文件
+ * 4. 删除目录
  *
  * @author qinhaizong
  */
@@ -40,7 +46,14 @@ public class App {
     private List<String> deleteText = Arrays.asList("北京传智播客教育 www.itcast.cn");
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, XPathExpressionException, TransformerException {
-        String pptxRootDir = "/Users/student/Documents/课件/";
+        //String pptxRootDir = "/Users/student/Documents/课件/";
+        String pptxRootDir = null;
+        if (null != args && args.length > 0) {
+            pptxRootDir = args[0];
+        }
+        pptxRootDir = pptxRootDir == null ? "./" : pptxRootDir;
+        File file = new File(pptxRootDir);
+        logger.info("格式化目录[{}]下所有pptx文件", file.getAbsolutePath());
         App app = new App();
         app.handlePptx(pptxRootDir);
     }
@@ -73,6 +86,8 @@ public class App {
             handleSlides(base);
             //压缩文件
             zip(base, new SimpleDateFormat("_yyyyMMddHHmmss").format(new Date()));
+            //删除目录
+            FileUtils.deleteDirectory(new File(base));
         }
         /*
         FileFilter fileFilter = new RegexFileFilter("^.*\\.pptx$");
